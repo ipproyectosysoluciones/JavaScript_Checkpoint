@@ -25,32 +25,32 @@ function tipologiasSeparadas (arr) {
 
   if ( arr.length === 0 ) return 'Tipologias inexistentes';
 
-  let stack = new Stack();
-  let tipologiasAgregadas = {};
+  const stack = new Stack();
+  let tipologias = [];
+  let tipologias2 = [];
 
-  for (const tipologia of arr) {
-    if (!tipologiasAgregadas[tipologia]) {
-      stack.push( tipologia );
-      tipologiasAgregadas[ tipologia ] = true;
+  let prev = null;
+
+  for (let i = 0; i < arr.length; i++) {
+    if ( !prev || prev !== arr[ i ] ) {
+      tipologias.push( arr[ i ] );
+      prev = arr[ i ];
     } else {
-      let ultimaTipologia = stack.pop();
-      
-      while (ultimaTipologia !== tipologia) {
-        tipologiasAgregadas[ ultimaTipologia ] = false;
-        ultimaTipologia = stack.pop();
-      }
-      stack.push( ultimaTipologia );
+      tipologias2.push( arr[ i ] );
     }
   }
 
-  if ( Object.keys( tipologiasAgregadas ).length === arr.length ) return 'No hay tipologias repetidas';
+  let tipologias3 = tipologias.concat( tipologias2 );
 
-  let resultado = [];
-
-  while (!stack.isEmpty()) {
-    resultado.unshift( stack.pop() );
+  for (let i = 0; i < tipologias3.length; i++) {
+    stack.push( tipologias3[ i ] );
   }
-  return resultado;
+
+  if ( tipologias.length === arr.length ) {
+    return 'No hay tipologias repetidas';
+  }
+
+  return stack;
 }
 
 // ⚠️ NO MODIFICAR NADA POR DEBAJO DE ESTA LÍNEA ⚠️
